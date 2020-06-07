@@ -29,8 +29,7 @@ contract MunchCommunity is EateryInfo, RockToken {
     //rank up after acquiring a certain amount of $MNCH.
     function rankUp(uint _id) external payable {
         require(msg.sender == muncherToOwner[_id]);
-        approve(msg.sender, 20 *(10**18));
-        transferFrom(msg.sender, address(this), 20 *(10**18));
+        transfer(address(this), 20 *(10**18));
         //require(msg.value == rankUpFee, "wrong amount of rockies provided");
         Muncher storage myMuncher = munchers[_id.sub(1)];
         myMuncher.rank = myMuncher.rank.add(1); //finding the muncher from the array and increasing its rank.
