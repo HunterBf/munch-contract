@@ -1,12 +1,9 @@
 pragma solidity ^0.6.6;
 import "./Muncher.sol";
-
 contract RewardsPayouts is MunchCommunity {
 
     uint basePay = 20 * (10**18);
-    //we want to show users when they recieve their $MNCH and where they got it from.
-    event paymentNotification(string eateryname, string rewardamount);
-    
+
     // Rewarding users with different rank names when they rank up high enough.
     modifier rankReward(uint _rank, uint _id) {
         require(msg.sender == muncherToOwner[_id]);
@@ -43,5 +40,11 @@ contract RewardsPayouts is MunchCommunity {
         return true;
     }
     
-    // we recieve an input from plaid, which technically must have a hex address. We only grant that hex address access to send $MNCH from
+    //rank up after acquiring a certain amount of $MNCH.
+    function rankUp(uint _id) external payable {
+        require(msg.sender == muncherToOwner[_id]);
+        burn(rankUpFee);
+        Muncher storage myMuncher = munchers[_id.sub(1)];
+        myMuncher.rank = myMuncher.rank.add(1); //finding the muncher from the array and increasing its rank.
+    }
 }
