@@ -4,6 +4,7 @@ import "./token.sol";
 contract EateryInfo {
     
     uint eateryId;
+    address owner;
     
     // everytime a new eatery is made, we want people to know!
     event newEatery(string name,string location, uint id);
