@@ -11,7 +11,6 @@ contract MunchCommunity is EateryInfo, MunchToken {
     uint muncherId;
     uint muncherIdArray;
     uint rewardclock = 8 hours;
-    uint rankUpFee = 100 * (10**18);
     uint referralAmount = 5 * (10**18);
    
    //a way to store all of our munchers on the blockchain!
@@ -20,7 +19,6 @@ contract MunchCommunity is EateryInfo, MunchToken {
         string rankname;
         bool isamuncher;
         bool referral;
-        uint8 rank;
         uint id;
         uint withdrawTime;
     }
@@ -44,14 +42,17 @@ contract MunchCommunity is EateryInfo, MunchToken {
         muncherIdArray = muncherId;
         muncherId = muncherId.add(1);
         string memory munchname = munchNameMaker(_nickname);
-        munchers.push(Muncher(munchname, "munchie", true, false, 1, muncherId, now));
+        munchers.push(Muncher(munchname, "munchie", true, false, muncherId, now));
         muncherToOwner[muncherId] = msg.sender;
         muncherNameToOwner[munchname] = msg.sender;
         addressToMuncher[msg.sender] = munchers[muncherIdArray];
         muncherNameToId[munchname] = muncherId;
     }
     
+    
     //may need to be a limitation on this...
+    // chris mentioned a user should only get rewarded after they have purchased at one eatery.
+    // needs to beb chang
     function muncherReferral(string memory _existingmuncher, string memory _nickname) public {
         if (muncherNameToId[_existingmuncher] > 0) {
             muncherCreator(_nickname);
