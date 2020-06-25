@@ -1,10 +1,9 @@
 pragma solidity ^0.6.6;
 import "./token.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
-contract EateryInfo is Ownable {
+contract EateryInfo is Ownable, MunchToken {
     
     uint eateryId;
-    address owner;
     
     // everytime a new eatery is made, we want people to know!
     event newEatery(string name,string location, uint id);
@@ -21,17 +20,24 @@ contract EateryInfo is Ownable {
        uint id;
     }
     
-    Eatery[] public eateries;
-    mapping (uint => address) eateryToOwner;
+    mapping (uint => Eatery) public eateryIndex;
     
-    //a manual way to onboard eateries, however only WE can add them.
+     //a manual way to onboard eateries, however only WE can add them.
     function eateryCreator(string calldata _name, string calldata _location, bool _certified, bool _local) external onlyOwner {
      eateryId = eateryId.add(1);
-     eateries.push(Eatery(_name, _location, _certified, _local, 0, eateryId));
+     eateryIndex[eateryId] = Eatery(_name, _location, _certified, _local, 0, eateryId);
      emit newEatery(_name, _location, eateryId);
     }
     
-    function eateryDestroyer() external {
-        
+    function eateryNameChanger(uint _eateryId, string calldata _name) external onlyOwner {
+        eateryIndex[_eateryId].name = _name;
+    }
+    
+    function eateryLocationChanger(uint _eateryId, string calldata _location) external onlyOwner {
+        eateryIndex[_eateryId].location = _location;
+    }
+    
+    function eateryLocalityChanger(uint _eateryId, bool _local) external onlyOwner {
+        eateryIndex[_eateryId].local = _local;
     }
 }
