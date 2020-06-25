@@ -1,7 +1,7 @@
 pragma solidity ^0.6.6;
 import "./Eatery.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Strings.sol";
-contract MunchCommunity is EateryInfo, MunchToken {
+contract MunchCommunity is EateryInfo {
     
     using Strings for uint;
     
@@ -9,58 +9,44 @@ contract MunchCommunity is EateryInfo, MunchToken {
     event paymentNotification(string eateryname, string rewardamount);
     
     uint muncherId;
-    uint muncherIdArray;
     uint rewardclock = 8 hours;
     uint referralAmount = 5 * (10**18);
    
    //a way to store all of our munchers on the blockchain!
     struct Muncher {
         string munchname;
-        string rankname;
         bool isamuncher;
         bool referral;
+        uint referred;
         uint id;
         uint withdrawTime;
+        address muncherAddress;
     }
     
-    Muncher[] internal munchers;
-    
-    //may be too many mappings..
-    mapping (uint => address) public muncherToOwner;
-    mapping (string => address) public muncherNameToOwner;
+    mapping (string => Muncher) public nameToMuncher;
     mapping (address => Muncher) public addressToMuncher;
-    mapping (string => uint) public muncherNameToId;
     
     //function to put together a muncher's name.
     function munchNameMaker(string memory _nickname) internal view returns(string memory) {
         return string(abi.encodePacked(_nickname,"#",muncherId.toString()));
     }
     
-    //function to make a muncher and push it to an array.
-    function muncherCreator(string memory _nickname) public {
+    //function to make a muncher and push it to an array. 
+    function muncherCreator(string memory _nickname) public returns (string memory) {
         require(addressToMuncher[msg.sender].isamuncher != true, "You're already a muncher!");
-        muncherIdArray = muncherId;
         muncherId = muncherId.add(1);
         string memory munchname = munchNameMaker(_nickname);
-        munchers.push(Muncher(munchname, "munchie", true, false, muncherId, now));
-        muncherToOwner[muncherId] = msg.sender;
-        muncherNameToOwner[munchname] = msg.sender;
-        addressToMuncher[msg.sender] = munchers[muncherIdArray];
-        muncherNameToId[munchname] = muncherId;
+        nameToMuncher[munchname] = Muncher(munchname, true, false, 0, muncherId, now, msg.sender);
+        addressToMuncher[msg.sender] = Muncher(munchname, true, false, 0, muncherId, now, msg.sender);
+        return munchname;
     }
     
-    
-    //may need to be a limitation on this...
     // chris mentioned a user should only get rewarded after they have purchased at one eatery.
-    // needs to beb chang
     function muncherReferral(string memory _existingmuncher, string memory _nickname) public {
-        if (muncherNameToId[_existingmuncher] > 0) {
+        if (nameToMuncher[_existingmuncher].id > 0) {
             muncherCreator(_nickname);
-            _mint(msg.sender, referralAmount);
-            _mint(muncherNameToOwner[_existingmuncher], referralAmount);
-            uint myArrayId = addressToMuncher[msg.sender].id - 1;
-            munchers[myArrayId].referral = true;
-            emit paymentNotification("Referral", "5 $MNCH");
+            addressToMuncher[msg.sender].referral = true;
+            addressToMuncher[msg.sender].referred = addressToMuncher[msg.sender].referred.add(1);
         } else {
             revert("The muncher who referred you doesn't exist!");
         }
