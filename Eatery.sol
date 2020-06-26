@@ -24,9 +24,9 @@ contract EateryInfo is Ownable, MunchToken {
     
      //a manual way to onboard eateries, however only WE can add them.
     function eateryCreator(string calldata _name, string calldata _location, bool _certified, bool _local) external onlyOwner {
-     eateryId = eateryId.add(1);
-     eateryIndex[eateryId] = Eatery(_name, _location, _certified, _local, 0, eateryId);
-     emit newEatery(_name, _location, eateryId);
+        eateryId = eateryId.add(1);
+        eateryIndex[eateryId] = Eatery(_name, _location, _certified, _local, 0, eateryId);
+        emit newEatery(_name, _location, eateryId);
     }
     
     function eateryNameChanger(uint _eateryId, string calldata _name) external onlyOwner {
@@ -35,6 +35,10 @@ contract EateryInfo is Ownable, MunchToken {
     
     function eateryLocationChanger(uint _eateryId, string calldata _location) external onlyOwner {
         eateryIndex[_eateryId].location = _location;
+    }
+    
+    function eateryCertifiedChanger(uint _eateryId, bool _value) external onlyOwner {
+        eateryIndex[_eateryId].certified = _value;
     }
     
     function eateryLocalityChanger(uint _eateryId, bool _local) external onlyOwner {
