@@ -6,7 +6,6 @@ This should be the MVP for our solidity contract
 
 Missing:
 
-- redemption of $MNCH. allow user to request to purchase something on site/app (maybe have a queue/array made up...)
 - modifiable zkSync integration
 - modifiable Chainlink integration
 
