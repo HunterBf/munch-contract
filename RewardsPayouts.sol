@@ -3,10 +3,16 @@ import "./Muncher.sol";
 contract RewardsPayouts is MunchCommunity {
 
     uint basePay = 20 * (10**18);
+    uint referralAmount = 5 * (10**18);
 
     function changeBasePay(uint _basePay) public onlyOwner returns(uint) {
         basePay = _basePay * (10**18);
-    return basePay;
+        return basePay;
+    } 
+    
+    function changeReferralPay(uint _referralAmount) public onlyOwner returns(uint) {
+        referralAmount = _referralAmount * (10**18);
+        return referralAmount;
     }
     
     //will need chainlink/plaid integration here
@@ -25,14 +31,14 @@ contract RewardsPayouts is MunchCommunity {
             emit paymentNotification(eateryIndex[_eateryId].name, "you've recived 10 $MNCH!");
             // change above b/c the eatery wont be in our system to take the name from.
         } 
-       addressToMuncher[_muncherAddress].withdrawTime = now.add(rewardclock);
+        addressToMuncher[_muncherAddress].withdrawTime = now.add(rewardclock);
         return true;
     }
     
     // not done yet
-   // function referralPayout() {
-   //   _mint(msg.sender, referralAmount);
-   //     _mint(nameToMuncher[_existingmuncher].muncherAddress, referralAmount);
-   // emit paymentNotification("Referral", "5 $MNCH");
-    //}
-} 
+   function referralPayout(address _referredAddress, address _referralAddress) external onlyOwner {
+        _mint(_referralAddress, referralAmount);
+        _mint(_referredAddress, referralAmount);
+        emit paymentNotification("Referral", "5 $MNCH");
+    }
+}
