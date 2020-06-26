@@ -10,7 +10,6 @@ contract MunchCommunity is EateryInfo {
     
     uint muncherId;
     uint rewardclock = 8 hours;
-    uint referralAmount = 5 * (10**18);
    
    //a way to store all of our munchers on the blockchain!
     struct Muncher {
