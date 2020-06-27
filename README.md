@@ -1,7 +1,17 @@
 # munch-contract
 
-I'm just testing some changes...
+Barebones contract.
 
-Current master contract is using a burnable ERC20 token. 
+This should be the MVP for our solidity contract
 
-So we might have to make another token that has that functionality!
+Missing:
+
+- modifiable zkSync integration
+- modifiable Chainlink integration
+
+Done:
+
+- Ability to delete eateries from our system (if they become uncertified)**
+- Ability to adjust the basePay/munch reward if need be. (onlyowner function probably)
+
+** changes eateries certified status to false instead of deleting.
