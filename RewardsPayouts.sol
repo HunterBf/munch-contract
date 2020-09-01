@@ -34,7 +34,6 @@ contract RewardsPayouts is Ownable, MunchToken {
     }
 }
     
-    //will need chainlink/plaid integration here
     function muncherPayout(address _muncherAddress, uint _fiatAmount, string memory _eateryStatus) public onlyOwner returns (bool success) {
         if (hashCompareWithLengthCheck(_eateryStatus, "certified")) {
             _mint(_muncherAddress, certifiedPay * _fiatAmount); 
