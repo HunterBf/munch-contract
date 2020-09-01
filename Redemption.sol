@@ -5,6 +5,10 @@ contract Redemption is RewardsPayouts {
 
     //Change owner to a POOL address
     address public munchPool = owner();
+    
+    function changePoolAddress(address _newPoolAddress) external onlyOwner{
+        munchPool = _newPoolAddress;
+    }
 
     function itemRedemption(uint _itemPrice, uint _munchRate) external onlyOwner {
         require(_munchRate >= 1);
