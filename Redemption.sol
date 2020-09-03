@@ -14,6 +14,10 @@ contract Redemption is Ownable {
     //Change owner to a POOL address
     address public munchPool = msg.sender;
 
+    function changePoolAddress(address _newPoolAddress) external onlyOwner{
+        munchPool = _newPoolAddress;
+    }
+
     function itemRedemption(uint _itemPrice, uint _munchRate, address _muncher) external onlyOwner {
         require(_munchRate >= 1);
         _itemPrice = _itemPrice * (10**18);
