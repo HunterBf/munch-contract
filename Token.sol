@@ -11,8 +11,7 @@ contract MunchToken is ERC20Burnable, Ownable {
         // we multiply by 10^18 because there are that many decimal places.
     }
 
-    function _munchMint(address _muncherAddress, uint _amount, address _owner) external {
-        require(_owner == owner());
+    function _munchMint(address _muncherAddress, uint _amount, address _owner) external onlyOwner {
         _mint(_muncherAddress, _amount);
     }
 }
